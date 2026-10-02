@@ -1,3 +1,12 @@
+# Importando as bibliotecas
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
+from time import sleep
+from pprint import pprint
+
 '''
 Passo a passo:
 
@@ -9,20 +18,6 @@ Passo a passo:
         Capturar os títulos e subtítulos das 4 primerias matérias
         Capturar os 4 links
 '''
-
-
-
-
-# Importando as bibliotecas
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
-import time
-from pprint import pprint
-
-
 
 
 opcoes = Options()
@@ -40,7 +35,7 @@ navegador.get('https://www.cnnbrasil.com.br/')
 
 
 ### Armazenando os elementos dos menus em variáveis
-menu_infra = navegador.find_element(By.XPATH, '/html/body/header/div/div/ul/li[7]/a')
+
 menu_ia = navegador.find_element(By.XPATH, '/html/body/header/div/div/ul/li[8]/a')
 
 
@@ -80,7 +75,7 @@ FECHANDO...
 POP UP FECHADO! CONTINUANDO EM 1s...
 ==============================''')
 
-            time.sleep(2)
+            sleep(2)
             # Tenta o clique no elemento novamente
             elemento.click()
             # Sai da função
@@ -118,7 +113,7 @@ ERRO: JANELA DE ANÚNCIO TAMBÉM NÃO FOI ENCONTRADA...
 ### Menus - Política | Money | Infra | I.A
 def politica():
     menu_politica = navegador.find_element(By.XPATH,'/html/body/header/div/div/ul/li[3]/a')
-    time.sleep(2)
+    sleep(2)
     clique(menu_politica)
     noticias = navegador.find_element('id', 'blockList_1_4')\
                         .find_element('id','block1810867')\
@@ -149,7 +144,7 @@ LINKS DAS NOTÍCIAS (POLÍTICA):
 
 def money():
     menu_money = navegador.find_element(By.XPATH, '/html/body/header/div/div/ul/li[4]/a')
-
+    sleep(2)
     clique(menu_money)
     elemento_pai = navegador.find_element('id', 'block11014636')\
                         .find_element('css selector','.relative.w-full')\
@@ -181,10 +176,30 @@ MANCHETES DAS NOTÍCIAS (MONEY):
 
 
 
+def infra():
+    menu_infra = navegador.find_element('link text', 'Infra')
+    
+    sleep(2)
+    clique(menu_infra)
+
+    sleep(2)
+    noticias = navegador.find_elements('css selector', '[data-section="article_list"] li')
+    print(f'NOTICIAS AQUI: {noticias}')
+
+    # for noticia in noticias:
+    #     print(f'''Noticias infra:
+    #         {noticia}''')
+
+    
+
+
 ### Função principal
 def main():   
     politica()
-    time.sleep(2)
+    sleep(2)
     money()
+    sleep(2)
+    infra()
+
     
 main()
