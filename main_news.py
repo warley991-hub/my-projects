@@ -154,7 +154,7 @@ def money():
     
     noticias = elemento_pai.find_elements('css selector','.keen-slider__slide.fader__slide')
 
-    print(f'NOTICIAS AQUI: {noticias}')
+    # print(f'NOTICIAS AQUI: {noticias}')
 
     money_noticias = {}
     
@@ -166,7 +166,7 @@ def money():
 ==============================
 MANCHETES DAS NOTÍCIAS (MONEY):
 ==============================
-    ''')
+''')
     
     for noticia in money_noticias:
         print(f'{money_noticias[noticia]}\n')
@@ -184,11 +184,24 @@ def infra():
 
     sleep(2)
     noticias = navegador.find_elements('css selector', '[data-section="article_list"] li')
-    print(f'NOTICIAS AQUI: {noticias}')
+    # print(f'NOTICIAS AQUI: {noticias}')
 
-    # for noticia in noticias:
-    #     print(f'''Noticias infra:
-    #         {noticia}''')
+    infra_noticias = {}
+
+    for i in range(1,5):
+        elemento_link = noticias[i-1].find_element('css selector', 'h3 a')
+        infra_noticias[f'noticia_{i}'] = {'manchete': elemento_link.text, 'link': elemento_link.get_attribute('href')}
+        
+    print(f'''
+==============================
+MANCHETES DAS NOTÍCIAS (INFRA):
+==============================
+''')
+        
+    for noticia in infra_noticias:
+        print(f'{infra_noticias[noticia]}\n')
+    
+    navegador.back()
 
     
 
