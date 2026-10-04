@@ -34,13 +34,6 @@ navegador.get('https://www.cnnbrasil.com.br/')
 
 
 
-### Armazenando os elementos dos menus em variáveis
-
-menu_ia = navegador.find_element(By.XPATH, '/html/body/header/div/div/ul/li[8]/a')
-
-
-
-
 ### Função de clique
 def clique(elemento):
     """
@@ -56,6 +49,7 @@ def clique(elemento):
         elemento.click()
     except ElementClickInterceptedException as e:
         try:
+            sleep(3)
             pop_up = navegador.find_element('id','onesignal-slidedown-dialog')
             fechar_pop_up = navegador.find_element('id','onesignal-slidedown-cancel-button')
             print(f'''
@@ -72,10 +66,10 @@ FECHANDO...
 
             print(f'''
 ==============================
-POP UP FECHADO! CONTINUANDO EM 1s...
+POP UP FECHADO! CONTINUANDO EM 3s...
 ==============================''')
 
-            sleep(2)
+            sleep(3)
             # Tenta o clique no elemento novamente
             elemento.click()
             # Sai da função
@@ -115,28 +109,24 @@ def politica():
     menu_politica = navegador.find_element(By.XPATH,'/html/body/header/div/div/ul/li[3]/a')
     sleep(2)
     clique(menu_politica)
-    noticias = navegador.find_element('id', 'blockList_1_4')\
-                        .find_element('id','block1810867')\
-                        .find_element('tag name','ul')\
-                        .find_elements('tag name','li')
+    noticias = navegador.find_elements('css selector', '[data-section="article_list"] li')
+    # print(f'NOTICIAS AQUI: {noticias}')
     
     politica_noticias = {}
     
     for i in range(1,5):
-        politica_noticias[f'noticia_{i}'] = noticias[i-1].find_element('tag name','figure')\
-                                                         .find_element('tag name','a')\
-                                                         .get_attribute('href')
-
+        elemento_link = noticias[i-1].find_element('css selector', 'h3 a')
+        politica_noticias[f'noticia_{i}'] = {'manchete': elemento_link.text, 'link': elemento_link.get_attribute('href')}
+            
     print(f'''
 ==============================
-LINKS DAS NOTÍCIAS (POLÍTICA):
+MANCHETES DAS NOTÍCIAS (POLITICA):
 ==============================
-    ''')
-    
+''')
+            
     for noticia in politica_noticias:
         print(f'{politica_noticias[noticia]}\n')
         
-    # Retorna a página anterior
     navegador.back()
 
 
@@ -206,6 +196,36 @@ MANCHETES DAS NOTÍCIAS (INFRA):
     
 
 
+def ia():
+    menu_ia = navegador.find_element(By.XPATH, '/html/body/header/div/div/ul/li[8]/a')
+
+    sleep(2)
+    clique(menu_ia)
+
+    sleep(2)
+    noticias = navegador.find_elements('css selector', '[data-section="article_list"] li')
+    # print(f'NOTICIAS AQUI: {noticias}')
+
+    ia_noticias = {}
+
+    for i in range(1,5):
+        elemento_link = noticias[i-1].find_element('css selector', 'h3 a')
+        ia_noticias[f'noticia_{i}'] = {'manchete': elemento_link.text, 'link': elemento_link.get_attribute('href')}
+        
+    print(f'''
+==============================
+MANCHETES DAS NOTÍCIAS (IA):
+==============================
+''')
+        
+    for noticia in ia_noticias:
+        print(f'{ia_noticias[noticia]}\n')
+    
+    navegador.back()
+
+
+
+
 ### Função principal
 def main():   
     politica()
@@ -213,6 +233,11 @@ def main():
     money()
     sleep(2)
     infra()
+    sleep(2)
+    ia()
 
-    
-main()
+
+
+
+if __name__ == '__main__':
+    main()
