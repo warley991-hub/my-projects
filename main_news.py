@@ -14,27 +14,22 @@ Passo a passo:
     Abrir o navegador no site.
 
     Para cada categoria:
-        Entrar na categoria
-        Capturar os títulos e subtítulos das 4 primerias matérias
-        Capturar os 4 links
+        Entra na categoria
+        Captura a manchete e o link da notícia e guarda em dicionários
 '''
 
 
+# Manter o navegador aberto
 opcoes = Options()
-opcoes.add_experimental_option("detach", True) # <--- ESSA É A LINHA MÁGICA
-
-
+opcoes.add_experimental_option("detach", True)
 
 
 # Iniciando o navegador e acessando o link
 navegador = webdriver.Chrome(options=opcoes)
-# Abrir o navegador no link
 navegador.get('https://www.cnnbrasil.com.br/')
 
 
-
-
-### Função de clique
+# Função de clique
 def clique(elemento):
     """
     Tenta clicar no elemento e fecha o pop-up se ele aparecer, independente do momento que ele apareça.
@@ -90,7 +85,7 @@ POP-UP NÃO ENCONTRADO...CONTINUANDO
 JANELA DE ANÚNCIO ENCONTRADA, FECHANDO...
 =========================================''')
 
-            #Fecha o anúncio
+            # Fecha o anúncio
             ad.click()
             
         except NoSuchElementException:
@@ -102,15 +97,12 @@ ERRO: JANELA DE ANÚNCIO TAMBÉM NÃO FOI ENCONTRADA...
             raise e
 
 
-
-
-### Menus - Política | Money | Infra | I.A
+# Menus - Política | Money | Infra | I.A
 def politica():
     menu_politica = navegador.find_element(By.XPATH,'/html/body/header/div/div/ul/li[3]/a')
     sleep(2)
     clique(menu_politica)
     noticias = navegador.find_elements('css selector', '[data-section="article_list"] li')
-    # print(f'NOTICIAS AQUI: {noticias}')
     
     politica_noticias = {}
     
@@ -130,8 +122,6 @@ MANCHETES DAS NOTÍCIAS (POLITICA):
     navegador.back()
 
 
-
-
 def money():
     menu_money = navegador.find_element(By.XPATH, '/html/body/header/div/div/ul/li[4]/a')
     sleep(2)
@@ -144,7 +134,6 @@ def money():
     
     noticias = elemento_pai.find_elements('css selector','.keen-slider__slide.fader__slide')
 
-    # print(f'NOTICIAS AQUI: {noticias}')
 
     money_noticias = {}
     
@@ -164,8 +153,6 @@ MANCHETES DAS NOTÍCIAS (MONEY):
     navegador.back()
 
 
-
-
 def infra():
     menu_infra = navegador.find_element('link text', 'Infra')
     
@@ -174,7 +161,6 @@ def infra():
 
     sleep(2)
     noticias = navegador.find_elements('css selector', '[data-section="article_list"] li')
-    # print(f'NOTICIAS AQUI: {noticias}')
 
     infra_noticias = {}
 
@@ -194,8 +180,6 @@ MANCHETES DAS NOTÍCIAS (INFRA):
     navegador.back()
 
     
-
-
 def ia():
     menu_ia = navegador.find_element(By.XPATH, '/html/body/header/div/div/ul/li[8]/a')
 
@@ -204,7 +188,6 @@ def ia():
 
     sleep(2)
     noticias = navegador.find_elements('css selector', '[data-section="article_list"] li')
-    # print(f'NOTICIAS AQUI: {noticias}')
 
     ia_noticias = {}
 
@@ -224,9 +207,6 @@ MANCHETES DAS NOTÍCIAS (IA):
     navegador.back()
 
 
-
-
-### Função principal
 def main():   
     politica()
     sleep(2)
@@ -235,8 +215,6 @@ def main():
     infra()
     sleep(2)
     ia()
-
-
 
 
 if __name__ == '__main__':
